@@ -1,0 +1,217 @@
+@extends('layouts.main')
+@section('title', 'Tambah Data Koperasi')
+@section('content')
+    @push('head')
+        <link rel="stylesheet" href="{{ asset('plugins/select2/dist/css/select2.min.css') }}">
+    @endpush
+
+    <div class="container-fluid">
+    	<div class="page-header">
+            <div class="row align-items-end">
+                <div class="col-lg-8">
+                    <div class="page-header-title">
+                        <i class="ik ik-award bg-blue"></i>
+                        <div class="d-inline">
+                            <h5>{{ __('Roles')}}</h5>
+                            <span>{{ __('Define roles of user')}}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <nav class="breadcrumb-container" aria-label="breadcrumb">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item">
+                                <a href="../index.html"><i class="ik ik-home"></i></a>
+                            </li>
+                            <li class="breadcrumb-item">
+                                <a href="#">{{ __('Roles')}}</a>
+                            </li>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+        </div>
+        <div class="row clearfix">
+	        <!-- start message area-->
+            @include('include.message')
+            <!-- end message area-->
+            <!-- only those have manage_role permission will get access -->
+            @can('manage_role')
+			<div class="col-md-12">
+	            <div class="card">
+	                <div class="card-header"><h3>{{ __('Add Role')}}</h3></div>
+	                <div class="card-body">
+	                    <form class="forms-sample" method="POST" action="{{url('role/create')}}">
+	                    	@csrf
+	                        <div class="row">
+	                            <div class="col-sm-5">
+	                                <div class="form-group">
+	                                    <label for="role">{{ __('Role')}}<span class="text-red">*</span></label>
+	                                    <input type="text" class="form-control is-valid" id="role" name="role" placeholder="Role Name" required>
+	                                </div>
+	                            </div>
+	                            <div class="col-sm-7">
+	                                <label for="exampleInputEmail3">{{ __('Assign Permission')}} </label>
+	                                <div class="row">
+	                                	@foreach($permissions as $key => $permission)
+	                                	<div class="col-sm-4">
+                                            <label class="custom-control custom-checkbox">
+                                                <input type="checkbox" class="custom-control-input" id="item_checkbox" name="permissions[]" value="{{$key}}">
+                                                <span class="custom-control-label">
+                                                	<!-- clean unescaped data is to avoid potential XSS risk -->
+                                                	{{ clean($permission,'titles')}}
+                                                </span>
+                                            </label>
+	                                		
+	                                	</div>
+	                                	@endforeach 
+	                                </div>
+	                                
+	                                <div class="form-group">
+	                                	<button type="submit" class="btn btn-primary btn-rounded">{{ __('Save')}}</button>
+	                                </div>
+	                            </div>
+	                        </div>
+	                    </form>
+	                </div>
+	            </div>
+	        </div>
+            @endcan
+		</div>
+		<div class="row">
+	        <div class="col-md-12">
+	            <div class="card p-3">
+	                <div class="card-header"><h3>{{ __('Roles')}}</h3></div>
+	                <div class="card-body">
+	                    <table id="roles_table" class="table">
+	                        <thead>
+	                            <tr>
+	                                <th>{{ __('Role')}}</th>
+	                                <th>{{ __('Permissions')}}</th>
+	                                <th>{{ __('Action')}}</th>
+	                            </tr>
+	                        </thead>
+	                        <tbody>
+	                        </tbody>
+	                    </table>
+	                </div>
+	            </div>
+	        </div>
+	    </div>
+    </div>
+
+    @push('script')
+        <script src="{{ asset('plugins/amcharts/amcharts.js') }}"></script>
+        <script src="{{ asset('plugins/amcharts/gauge.js') }}"></script>
+        <script src="{{ asset('plugins/amcharts/serial.js') }}"></script>
+        <script src="{{ asset('plugins/amcharts/themes/light.js') }}"></script>
+        <script src="{{ asset('plugins/amcharts/animate.min.js') }}"></script>
+        <script src="{{ asset('plugins/amcharts/pie.js') }}"></script>
+        <script src="{{ asset('plugins/ammap3/ammap/ammap.js') }}"></script>
+        <script src="{{ asset('plugins/ammap3/ammap/maps/js/usaLow.js') }}"></script>
+        <script src="{{ asset('plugins/select2/dist/js/select2.min.js') }}"></script>
+        <script src="{{ asset('js/product.js') }}"></script>
+        <script>
+            $(function() {
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    }
+                });
+            });
+        </script>
+    @endpush
+@endsection@extends('layouts.main') 
+@section('title', 'Jenis Koperasi')
+@section('content')
+    <!-- push external head elements to head -->
+    @push('head')
+
+        <link rel="stylesheet" href="{{ asset('plugins/weather-icons/css/weather-icons.min.css') }}">
+        <link rel="stylesheet" href="{{ asset('plugins/owl.carousel/dist/assets/owl.carousel.min.css') }}">
+        <link rel="stylesheet" href="{{ asset('plugins/owl.carousel/dist/assets/owl.theme.default.min.css') }}">
+        <link rel="stylesheet" href="{{ asset('plugins/chartist/dist/chartist.min.css') }}">
+    @endpush
+
+    <div class="container-fluid">
+    	<div class="row align-items-center">
+    		<!-- page statustic chart start -->
+            <div class="col-md-5 offset-md-1">
+                <div class="card card-red text-white" id="non-ksp">
+                    <div class="card-block">
+                        <div class="row align-items-center">
+                            <div class="col-8">
+                                <h4 class="mb-0"> Non KSP </h4>
+                            </div>
+                            <div class="col-4 text-right">
+                                <i class="ik ik-airplay f-30"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-5">
+                <div class="card card-blue text-white" id="ksp">
+                    <div class="card-block">
+                        <div class="row align-items-center">
+                            <div class="col-8">
+                                <h4 class="mb-0"> KSP KUK </h4>
+                            </div>
+                            <div class="col-4 text-right">
+                                <i class="ik ik-check-square f-30"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- page statustic chart end -->
+    	</div>
+    </div>
+	<!-- push external js -->
+    @push('script')
+        <script src="{{ asset('plugins/owl.carousel/dist/owl.carousel.min.js') }}"></script>
+        <script src="{{ asset('plugins/chartist/dist/chartist.min.js') }}"></script>
+        <script src="{{ asset('plugins/flot-charts/jquery.flot.js') }}"></script>
+        <!-- <script src="{{ asset('plugins/flot-charts/jquery.flot.categories.js') }}"></script> -->
+        <script src="{{ asset('plugins/flot-charts/curvedLines.js') }}"></script>
+        <script src="{{ asset('plugins/flot-charts/jquery.flot.tooltip.min.js') }}"></script>
+
+        <script src="{{ asset('plugins/amcharts/amcharts.js') }}"></script>
+        <script src="{{ asset('plugins/amcharts/serial.js') }}"></script>
+        <script src="{{ asset('plugins/amcharts/themes/light.js') }}"></script>
+       
+        
+        <script src="{{ asset('js/widget-statistic.js') }}"></script>
+        <script src="{{ asset('js/widget-data.js') }}"></script>
+        <script src="{{ asset('js/dashboard-charts.js') }}"></script>
+        
+        <script>
+            $(function () {
+
+                function hover() {
+                    $('#non-ksp').hover(function() {
+                        $(this).css('cursor','pointer');
+                    });
+                    $('#ksp').hover(function() {
+                        $(this).css('cursor','pointer');
+                    });
+                }
+
+                function kspOnClick() {
+                    $('#non-ksp').click(function (e) { 
+                        e.preventDefault();
+                        window.location.href = '/input/sertifikat/tatakelola';
+                    });
+
+                    $('#ksp').click(function (e) { 
+                        e.preventDefault();
+                        window.location.href = '/ksp-input/sertifikat/tatakelola';
+                    });
+                }
+
+                kspOnClick();
+                hover();
+            });
+        </script>
+    @endpush
+@endsection
